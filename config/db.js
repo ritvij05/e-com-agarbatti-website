@@ -3,28 +3,6 @@ require('dotenv').config();
 
 
 // Database connection
-// const connectDB = mysql.createConnection({
-//     host: process.env.HOST,
-//     user: process.env.USER,
-//     password: process.env.PASS,
-//     database: process.env.DB,
-//     multipleStatements: true,
-//   });
-  
-//   // Checking connection
-//   connectDB.connect((error) => {
-//     if (error) {
-//       console.log(error);
-//     } else {
-//       console.log("MySqlDB Connected..");
-//     }
-//   });
-
-//   module.exports = connectDB;
-
-
-//   var mysql = require('mysql');
-
 var pool  = mysql.createPool({
   connectionLimit : 10,
   queueLimit: 100,

@@ -1,14 +1,18 @@
 const express = require("express");
-// const connectDB = require("./config/db");
-
 const app = express();
+
+// Express Middleware
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Setting View Enginer
 app.set("view engine", "ejs");
 
 // Define Routes
-app.use("/admin/login", require("./routes/admin/login"));
-app.use("/", require("./routes/client/index"));
+app.use("/admin/", require("./routes/adminRoutes"));
+app.use("/", require("./routes/adminRoutes"));
+
 
 const PORT = process.env.PORT || 5000;
 
