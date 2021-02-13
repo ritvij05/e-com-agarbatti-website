@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require('path');
 
 // Express Middleware
 const bodyParser = require('body-parser');
@@ -8,6 +9,9 @@ app.use(bodyParser.json());
 
 // Setting View Enginer
 app.set("view engine", "ejs");
+
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(__dirname + '/public'));
 
 // Define Routes
 app.use("/admin/", require("./routes/adminRoutes"));
