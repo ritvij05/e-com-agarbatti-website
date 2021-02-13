@@ -7,7 +7,7 @@ var adminController = {
  }
 
 
-function loginPage(req,res) {
+ function loginPage(req,res) {
     AdminModel.getUser().then((data)=>{
         // data=JSON.stringify(data);
         // data=JSON.parse(data);
