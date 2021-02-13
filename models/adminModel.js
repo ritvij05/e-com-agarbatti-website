@@ -7,17 +7,32 @@ var AdminModel = {
     // registerAdmin:registerAdmin
  }
 
-// function getUser() {
-//     return new Promise((resolve,reject) => {
-//         connectDB.query("Select * from login",(error,results)=>{
-//            if(error) {
-//                reject(error);
-//            } else {
-//                resolve(results);
-//            }
-//          });
-//        });
-// }
+ AdminModel.getUser=function(data) {
+     // return new Promise((resolve,reject) => {
+         connectDB.query("SELECT * from admins",(error,results)=>{
+            if(error) {
+                return data(error);
+            } else {
+                return data(results);
+            }
+          });
+     //    });
+ }
+
+AdminModel.login = function(request, result){
+  request.password = bcrypt.hashSync(request.password, saltRounds);
+  connectDB.query(`SELECT * FROM admins WHERE email = '${request.email}' AND password = '${request.password}' LIMIT 1`, (error, results) => {
+    if(error){
+      return result(error);
+    }
+    if(results[0].cnt == 1){
+      return result('Login succesful');
+    }
+    else{
+      return result('No or more than one record found');
+    }
+  });
+}
 
 AdminModel.registerAdmin=function(payload,result) {
 

@@ -1,0 +1,7 @@
+body{
+  min-height: 100vh;
+}
+#formdiv{
+  max-width: 500px;
+  margin: 0 auto;
+}
