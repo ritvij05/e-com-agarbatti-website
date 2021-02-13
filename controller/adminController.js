@@ -1,19 +1,26 @@
 const AdminModel = require('../models/adminModel');
 var validator = require("email-validator");
 var adminController = {
-    loginPage:loginPage,
+    showLoginPage:showLoginPage,
     registerPage:registerPage,
-    // login:login,
+    login:login,
  }
 
 
- function loginPage(req,res) {
-    AdminModel.getUser().then((data)=>{
-        // data=JSON.stringify(data);
-        // data=JSON.parse(data);
-        data=data[0].username
-        res.render('pages/index',{data:data})
-    });
+function showLoginPage(req,res) {
+  // AdminModel.getUser(function(data){
+  //     // data=JSON.stringify(data);
+  //     // data=JSON.parse(data);
+  //     console.log(data[0].id);
+  //     res.render('pages/index',{data:data[0].name})
+  // });
+  res.render('pages/login');
+}
+
+function login(req, res){
+  AdminModel.login(req.body, function(result){
+    console.log(result);
+  })
 }
 
 function registerPage(req,res) {
@@ -39,10 +46,10 @@ function registerPage(req,res) {
     if(arr.length){
         res.status(400).json({error: arr[0]});
     }
-    else{           
+    else{
         AdminModel.registerAdmin(payload,function(result){
             res.json({data:result});
-        
+
         });
     }
 }
