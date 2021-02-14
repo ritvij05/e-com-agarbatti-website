@@ -14,7 +14,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + '/public'));
 
 // Define Routes
-app.use("/admins/", require("./routes/adminRoutes"));
+app.use("/admin/", require("./routes/adminRoutes"));
 
 
 const PORT = process.env.PORT || 5000;
