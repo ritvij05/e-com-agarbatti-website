@@ -64,7 +64,7 @@ AdminModel.login = function(request, result){
 
 // @desc   Change User Password
 // @access Private
-AdminModel.registerAdmin=function(email,result) {
+AdminModel.forgotPass=function(email,result) {
     connectDB.query(`SELECT  COUNT(*) as cnt FROM admins WHERE email ='${email}'`, function (err, res) {
         if(err) return result(err);
         if(!res[0].cnt) return result('Email Not Found...');
@@ -99,7 +99,7 @@ AdminModel.registerAdmin=function(email,result) {
 
 // @desc   Update User Password
 // @access Private
-AdminModel.registerAdmin=function(payload,result) {
+AdminModel.updatePass=function(payload,result) {
     payload.password=  bcrypt.hashSync(payload.password, saltRounds);
     connectDB.query(`update admins set password='${payload.password}' where email='${payload.email}'`, function (err, res) {
         if(err) return result(err);
@@ -171,5 +171,30 @@ AdminModel.verifyUser = function(request, result){
 
 });
 }
+
+// Manage Products & Categories
+
+
+// @desc   Verify User Account
+// @access Private
+AdminModel.manageCat = function(data,result){
+  if(data.type=='add'){
+    connectDB.query(`insert into categories (name) values ('${data.name}')`,(err,results)=>{
+      if(err) return result(err);
+      return result('Category Addition Successful...');
+    });
+  }else if(data.type=='update'){
+    connectDB.query(`update categories set name='${data.name}' where id='${data.id}'`,(err,results)=>{
+      if(err) return result(err);
+      return result('Category Updation Successful...');
+    });
+  }else{
+    connectDB.query(`delete from categories where name='${data.name}' and id='${data.id}'`,(err,results)=>{
+      if(err) return result(err);
+      return result('Category Deletion Successful...');
+    });
+  }
+}
+
 
 module.exports = AdminModel;

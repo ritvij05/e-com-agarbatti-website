@@ -8,7 +8,9 @@ var adminController = {
     verifyUser:verifyUser,
     forgotPass:forgotPass,
     changePass:changePass,
-    updatePass:updatePass
+    updatePass:updatePass,
+    manageCat:manageCat,
+    manageProd:manageProd
  }
 
 
@@ -104,7 +106,27 @@ function verifyUser(req,res)
     });
 }
 
+// Manage Products & Categories
+function manageCat(req,res)
+{                               // type -> send... add,del,update
+   let {type,id,name}=req.body; //send null id only while adding category
+   data={type,id,name};
+   if(type =='' || name=='') res.json({err:'All Fields Are Mandatory...'});
+   AdminModel.manageCat(data,function(result){
+        res.json({data:result});
+   });
+}
 
+
+function manageProd(req,res)
+{                               // type -> send... add,del,update
+//    let {type,id,categoty_id,name,company_name,description,images,in_stock,actual_price,discount_price,purchased_count}=req.body; //send null id only while adding category
+//    data={type,id,name};
+//    if(type =='' || name=='') res.json({err:'All Fields Are Mandatory...'});
+//    AdminModel.manageCat(data,function(result){
+//         res.json({data:result});
+//    });
+}
 
 
 module.exports= adminController;

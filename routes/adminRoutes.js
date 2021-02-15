@@ -16,6 +16,12 @@ router.post('/changePass/:token',[auth,adminController.updatePass]);
 
 // router.get('/register', [auth,adminController.showRegisterPage]);
 router.post('/register/:token',[auth, adminController.registerPage] );
-router.get('/confirmation/:token',[auth,adminController.verifyUser])
+router.get('/confirmation/:token',[auth,adminController.verifyUser]);
+
+// router.get();
+router.post('/manageCat',adminController.manageCat);
+
+// router.get();
+router.post('/manageProd',adminController.manageProd);
 
 module.exports = router;

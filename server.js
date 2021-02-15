@@ -15,6 +15,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Define Routes
 app.use("/admin/", require("./routes/adminRoutes"));
+app.use("/", require("./routes/userRoutes"));
 
 
 const PORT = process.env.PORT || 5000;
