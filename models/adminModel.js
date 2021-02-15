@@ -29,12 +29,12 @@ AdminModel.login = function(request, result){
     if(error) {
         msg='error';
         data={msg,error}
-        return result(data); } 
+        return result(data); }
     if(results.length){
         if(results[0].status!==1) return result('Account Not Verified...');
         if( bcrypt.compareSync(request.password, results[0].password)){
             msg='login Successful...';
-          
+
             const payload = {
                 user: {
                   id: results[0].id,
@@ -50,11 +50,11 @@ AdminModel.login = function(request, result){
                     return result(data);
                 }
               );
-            
+
         }
         else{
             return result('Password Does Not Match...');
-        }   
+        }
     }
     else{
       return result('Email Not Found...');
@@ -64,7 +64,7 @@ AdminModel.login = function(request, result){
 
 // @desc   Change User Password
 // @access Private
-AdminModel.registerAdmin=function(email,result) {
+AdminModel.forgotPass=function(email,result) {
     connectDB.query(`SELECT  COUNT(*) as cnt FROM admins WHERE email ='${email}'`, function (err, res) {
         if(err) return result(err);
         if(!res[0].cnt) return result('Email Not Found...');
@@ -93,13 +93,13 @@ AdminModel.registerAdmin=function(email,result) {
         });
       } catch (error) {
         return result(error);
-      } 
-    }); 
+      }
+    });
 }
 
 // @desc   Update User Password
 // @access Private
-AdminModel.registerAdmin=function(payload,result) {
+AdminModel.updatePass=function(payload,result) {
     payload.password=  bcrypt.hashSync(payload.password, saltRounds);
     connectDB.query(`update admins set password='${payload.password}' where email='${payload.email}'`, function (err, res) {
         if(err) return result(err);
@@ -153,7 +153,7 @@ AdminModel.registerAdmin=function(payload,result) {
                             });
                           } catch (error) {
                             return result(error);
-                          }    
+                          }
                     }
                 });
             }
