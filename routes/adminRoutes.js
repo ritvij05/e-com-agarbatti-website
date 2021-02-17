@@ -14,7 +14,7 @@ router.post('/forgotPass',adminController.forgotPass);
 router.get('/changePass/:token',[auth,adminController.changePass]);
 router.post('/changePass/:token',[auth,adminController.updatePass]);
 
-router.get('/register', [auth, adminController.showRegisterPage]);
+// router.get('/register', [auth, adminController.showRegisterPage]);
 router.post('/register/:token',[auth, adminController.registerPage] );
 router.get('/confirmation/:token',[auth,adminController.verifyUser])
 
