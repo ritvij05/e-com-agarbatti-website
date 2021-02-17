@@ -172,4 +172,29 @@ AdminModel.verifyUser = function(request, result){
 });
 }
 
+// Manage Products & Categories
+
+
+// @desc   Verify User Account
+// @access Private
+AdminModel.manageCat = function(data,result){
+  if(data.type=='add'){
+    connectDB.query(`insert into categories (name) values ('${data.name}')`,(err,results)=>{
+      if(err) return result(err);
+      return result('Category Addition Successful...');
+    });
+  }else if(data.type=='update'){
+    connectDB.query(`update categories set name='${data.name}' where id='${data.id}'`,(err,results)=>{
+      if(err) return result(err);
+      return result('Category Updation Successful...');
+    });
+  }else{
+    connectDB.query(`delete from categories where name='${data.name}' and id='${data.id}'`,(err,results)=>{
+      if(err) return result(err);
+      return result('Category Deletion Successful...');
+    });
+  }
+}
+
+
 module.exports = AdminModel;
