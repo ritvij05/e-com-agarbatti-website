@@ -11,6 +11,7 @@ var adminController = {
     changePass:changePass,
     updatePass:updatePass,
     dashboard:dashboard,
+    showCategories:showCategories,
     manageCategories:manageCategories,
     storeCategory:storeCategory,
     editCategory:editCategory,
@@ -173,19 +174,19 @@ function verifyUser(req,res)
 }
 
 // Manage Products & Categories
-// function manageCategories(req,res)
-// {                               // type -> send... add,del,update
-//    let {type,id,name}=req.body; //send null id only while adding category
-//    data={type,id,name};
-//    if(type =='' || name=='') res.json({err:'All Fields Are Mandatory...'});
-//    AdminModel.manageCategories(data,function(result){
-//         res.json({data:result});
-//    });
-// }
+function manageCategories(req,res)
+{                               // type -> send... add,del,update
+   let {type,id,name}=req.body; //send null id only while adding category
+   data={type,id,name};
+   if(type =='' || name=='') res.json({err:'All Fields Are Mandatory...'});
+   AdminModel.manageCategories(data,function(result){
+        res.json({data:result});
+   });
+}
 
 
 // categories
-function manageCategories(req, res){
+function showCategories(req, res){
   // get all categories here
   res.render('pages/admin/manage-categories');
 }
@@ -220,6 +221,7 @@ function manageProducts(req, res){
 }
 
 function createProduct(req, res){
+  // categories list, companies list
   res.render('pages/admin/create-product');
 }
 

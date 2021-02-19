@@ -20,7 +20,8 @@ router.get('/confirmation/:token',[auth,adminController.verifyUser]);
 
 // router.get();
 router.get('/dashboard',adminController.dashboard);
-router.get('/categories/manage',adminController.manageCategories);
+router.get('/categories/manage',adminController.showCategories);
+router.post('/categories/manage',adminController.manageCategories);
 router.post('/categories/create',adminController.storeCategory);
 router.get('/categories/edit/:id',adminController.editCategory);
 router.post('/categories/edit/:id',adminController.updateCategory);
