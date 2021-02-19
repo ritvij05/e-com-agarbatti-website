@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="is-clipped">
+  <head>
+    <meta charset="utf-8">
+    <title>Admin Login</title>
+    <%- include('../.././partials/admin-css-links') -%>
+    <link rel="stylesheet" href="/css/login.css">
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <a href="/admin/login" class="navbar-item">Login</a>
+          <a href="/admin/register" class="navbar-item">Register</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <section class="section">
+        <div class="container">
+          <div id="messagediv">
+            <% const m = getMessages() %>
+            <% if(m.error){ %>
+              <% m.error.forEach((element) => { %>
+                <article class="message is-danger">
+                  <div class="message-body">
+                    <%= element %>
+                  </div>
+                </article>
+              <% }) %>
+            <% } %>
+            <% if(m.success){ %>
+              <% m.success.forEach((element) => { %>
+                <article class="message is-success">
+                  <div class="message-body">
+                    <%= element %>
+                  </div>
+                </article>
+              <% }) %>
+            <% } %>
+          </div>
+          <div class="box" id="formdiv">
+            <form class="" action="/admin/login" method="post">
+              <div class="field has-text-centered">
+                <p class="is-size-4">Admin's Login</p>
+                <hr>
+              </div>
+              <div class="">
+                <p class="has-text-danger has-text-centered" id="error"></p>
+              </div>
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left">
+                  <input type="email" class="input" name="email" id="email" required placeholder="Enter your email">
+                  <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Password</label>
+                <div class="control has-icons-left">
+                  <input type="password" class="input" name="password" id="password" required placeholder="Enter your password">
+                  <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                </div>
+              </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <button type="submit" class="button is-link">Login</button>
+                </div>
+                <div class="control">
+                  <button type="button" class="button is-text" id="forgot">Forgot Password</button>
+                </div>
+              </div>
+            </form>
+            <div class="modal" id="forgot_modal">
+              <div class="modal-background"></div>
+              <div class="modal-content">
+                <div class="box mx-3">
+                  <form class="my-3" action="/admin/forgotPass" method="post">
+                    <p class="subtitle">Change Password</p>
+                    <hr>
+                    <div class="">
+                      <p class="has-text-danger has-text-centered" id="error"></p>
+                    </div>
+                    <div class="field">
+                      <label class="label">Email ID</label>
+                      <div class="control">
+                        <input type="email" class="input" name="email" id="email_forgot" required placeholder="Enter your registered email-id">
+                      </div>
+                      <p><small class="is-size-7">*We will send you a reset password link on your email</small></p>
+                    </div>
+                    <div class="field is-grouped">
+                      <div class="control">
+                        <button type="submit" class="button is-link">Send Password Link</button>
+                        <button type="button" class="close_modal button is-link is-light">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <button class="modal-close close_modal is-large" aria-label="close"></button>
+            </div>
+            <hr class="mb-3">
+            <div class="has-text-centered is-size-7">
+              <p>New to the platform? <a href="/admin/register">Register instead</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <script src="/js/admin-login.js" charset="utf-8"></script>
+    <script src="/js/validate.js" charset="utf-8"></script>
+  </body>
+</html>

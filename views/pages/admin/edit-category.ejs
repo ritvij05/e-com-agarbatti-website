@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Edit Category</title>
+    <%- include('../.././partials/admin-css-links') -%>
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <p class="navbar-item">Welcome username</p>
+          <a href="#" class="navbar-item">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div id="parentcontainer" data-id="edit-category">
+        <%- include('../.././partials/admin-sidemenu') -%>
+        <div id="main_content">
+          <div class="container">
+            <div class="columns is-centered">
+              <div id="create_div" class="column is-10-tablet is-6-desktop">
+                <div class="">
+                  <p class="title has-text-weight-normal">Editing Category: Category Name</p>
+                  <hr>
+                </div>
+                <form class="mt-4" action="/admin/categories/edit/category_id" method="post">
+                  <input type="hidden" name="id" value="category_id">
+                  <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                      <input type="text" required class="input" name="name" placeholder="Enter Category Name" value="Category Name">
+                    </div>
+                  </div>
+                  <div class="field is-grouped">
+                    <div class="control">
+                      <button type="submit" class="button is-primary">Submit</button>
+                    </div>
+                    <div class="control">
+                      <a href="/admin/categories/manage" class="button is-light">Cancel</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <script src="/js/delete-modal.js" charset="utf-8"></script>
+  </body>
+</html>

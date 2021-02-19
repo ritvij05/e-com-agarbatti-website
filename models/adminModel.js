@@ -31,9 +31,9 @@ AdminModel.login = function(request, result){
         data={msg,error}
         return result(data); }
     if(results.length){
-        if(results[0].status!==1) return result('Account Not Verified...');
+        if(results[0].status!==1) return result('not verified');
         if( bcrypt.compareSync(request.password, results[0].password)){
-            msg='login Successful...';
+            msg='login successful';
 
             const payload = {
                 user: {
@@ -53,11 +53,11 @@ AdminModel.login = function(request, result){
 
         }
         else{
-            return result('Password Does Not Match...');
+            return result('password not found');
         }
     }
     else{
-      return result('Email Not Found...');
+      return result('email not found');
     }
   });
 }
@@ -67,7 +67,7 @@ AdminModel.login = function(request, result){
 AdminModel.forgotPass=function(email,result) {
     connectDB.query(`SELECT  COUNT(*) as cnt FROM admins WHERE email ='${email}'`, function (err, res) {
         if(err) return result(err);
-        if(!res[0].cnt) return result('Email Not Found...');
+        if(!res[0].cnt) return result('no email');
     try {
         const payload = {
             user: {
@@ -88,7 +88,7 @@ AdminModel.forgotPass=function(email,result) {
           if (error) {
             return result(error);
           } else {
-            return result('Password Change Link Sent Successfully...');
+            return result('link sent');
           }
         });
       } catch (error) {
@@ -141,14 +141,14 @@ AdminModel.registerAdmin=function(payload,result) {
                               from: process.env.Gmail_user,
                               to: payload.email,
                               subject: "Confirmation Email!",
-                              html: `Please Click On The Following Link To Verify You'r Account: <br>Your Name: "${payload.name}"<br><a href="${url}">Click Here To Confirm Email</a>`,
+                              html: `Please Click On The Following Link To Verify Your Account: <br>Your Name: "${payload.name}"<br><a href="${url}">Click Here To Confirm Email</a>`,
                             };
                             transporter.sendMail(mailOptions, function (error, info) {
                               if (error) {
                                 connectDB.query(`delete from admins where email='${payload.email}'`);
                                 return result(error);
                               } else {
-                                return result('Admin Added Successfully...');
+                                return result('admin added');
                               }
                             });
                           } catch (error) {
@@ -177,7 +177,7 @@ AdminModel.verifyUser = function(request, result){
 
 // @desc   Verify User Account
 // @access Private
-AdminModel.manageCat = function(data,result){
+AdminModel.manageCategories = function(data,result){
   if(data.type=='add'){
     connectDB.query(`insert into categories (name) values ('${data.name}')`,(err,results)=>{
       if(err) return result(err);

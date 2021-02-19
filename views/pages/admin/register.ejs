@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="is-clipped">
+  <head>
+    <meta charset="utf-8">
+    <title>Admin Registration</title>
+    <%- include('../.././partials/admin-css-links') -%>
+    <link rel="stylesheet" href="/css/login.css">
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <a href="/admin/login" class="navbar-item">Login</a>
+          <a href="/admin/register" class="navbar-item">Register</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <section class="section">
+        <div class="container">
+          <div id="messagediv">
+            <% const m = getMessages() %>
+            <% if(m.error){ %>
+              <% m.error.forEach((element) => { %>
+                <article class="message is-danger">
+                  <div class="message-body">
+                    <%= element %>
+                  </div>
+                </article>
+              <% }) %>
+            <% } %>
+            <% if(m.success){ %>
+              <% m.success.forEach((element) => { %>
+                <article class="message is-success">
+                  <div class="message-body">
+                    <%= element %>
+                  </div>
+                </article>
+              <% }) %>
+            <% } %>
+          </div>
+          <div class="box" id="formdiv">
+            <form class="" action="/admin/register" method="post">
+              <div class="field has-text-centered">
+                <p class="is-size-4">Admin Registration Page</p>
+                <hr>
+              </div>
+              <div class="">
+                <p class="has-text-danger has-text-centered" id="error"></p>
+              </div>
+              <div class="field">
+                <label class="label">Name</label>
+                <div class="control has-icons-left">
+                  <input type="text" class="input" name="name" id="name" required placeholder="Enter full name">
+                  <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                </div>
+                </div>
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left">
+                  <input type="email" class="input" name="email" id="email" required placeholder="Enter your email">
+                  <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Contact</label>
+                <div class="control has-icons-left">
+                  <input type="number" class="input" name="contact" id="contact" required pattern="[0-9]{10}" title="Enter 10 digit contact number" placeholder="Enter your contact number">
+                  <span class="icon is-small is-left"><i class="fas fa-phone-alt"></i></span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Password</label>
+                <div class="control has-icons-left">
+                  <input type="password" class="input" name="password" id="password" required placeholder="Enter your password">
+                  <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                </div>
+                <p><small class="has-text-grey-light">Password must contain a capital letter, a special character and a number</small></p>
+              </div>
+              <div class="field">
+                <label class="label">Confirm Password</label>
+                <div class="control has-icons-left">
+                  <input type="password" class="input" name="confirm_password" id="confirm_password" required placeholder="Retype your password">
+                  <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-link">Register</button>
+                </div>
+              </div>
+            </form>
+            <hr class="mb-3">
+            <div class="has-text-centered is-size-7">
+              <p>Already have an account? <a href="/admin/login">Login instead</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <script src="/js/admin-register.js" charset="utf-8"></script>
+    <script src="/js/validate.js" charset="utf-8"></script>
+  </body>
+</html>

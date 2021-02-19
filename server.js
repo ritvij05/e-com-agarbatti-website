@@ -4,8 +4,14 @@ const path = require('path');
 
 // Express Middleware
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('express-flash-messages');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(flash());
+app.use(session({
+  secret: 'secret'
+}))
 
 // Setting View Enginer
 app.set("view engine", "ejs");

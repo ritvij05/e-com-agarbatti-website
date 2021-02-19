@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <%- include('../.././partials/admin-css-links') -%>
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <p class="navbar-item">Welcome username</p>
+          <a href="#" class="navbar-item">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div id="parentcontainer" data-id="dashboard">
+        <%- include('../.././partials/admin-sidemenu') -%>
+        <div id="main_content">
+          <p class="title">Dashboard</p>
+        </div>
+      </div>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+  </body>
+</html>

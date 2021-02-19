@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Edit Product</title>
+    <%- include('../.././partials/admin-css-links') -%>
+    <link rel="stylesheet" href="/css/create_product.css">
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <p class="navbar-item">Welcome username</p>
+          <a href="#" class="navbar-item">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div id="parentcontainer" data-id="edit-product">
+        <%- include('../.././partials/admin-sidemenu') -%>
+        <div id="main_content">
+          <div class="container">
+            <div class="columns is-centered">
+              <div id="create_div" class="column is-10-tablet is-6-desktop">
+                <div class="">
+                  <p class="title has-text-weight-normal">Editing product: Product Name</p>
+                  <hr>
+                </div>
+                <form class="mt-4" action="/admin/products/edit/product_id" method="post">
+                  <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                      <input type="text" name="name" id="name" class="input" required placeholder="Enter Product Name" value="Product Name">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Company Name</label>
+                    <div class="control">
+                      <input type="text" name="company_name" id="company_name" required class="input" placeholder="Enter Company Name" value="Company Name">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Category</label>
+                    <div class="select">
+                      <select name="category_id" required>
+                        <!-- jiska id match karega woh selected -->
+                        <option selected disabled>Select a category</option>
+                        <option value="1">Agarbatti</option>
+                        <option value="2">Dhoop</option>
+                        <option value="3">Something</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Product Description</label>
+                    <div class="control">
+                      <textarea name="description" class="textarea" required placeholder="Enter Product Description" rows="6">Product Description</textarea>
+                    </div>
+                    <p class="help">This will be changed into an iframe if needed later</p>
+                  </div>
+                  <div class="field">
+                    <div class="file has-name" id="images_input">
+                      <label class="file-label">
+                        <input type="file" class="file-input" name="images" multiple="true">
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                          </span>
+                          <span class="file-label">Upload Product Images</span>
+                        </span>
+                        <span class="file-name">No File Uploaded</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Images Preview</label>
+                    <div id="images-div">
+                      <p>Idher images ayega uploaded wala</p>
+                    </div>
+                  </div>
+                  <div class="field mt-4">
+                    <label class="checkbox">
+                      <!-- checked if Available -->
+                      <input type="checkbox" name="in_stock" value="yes">
+                      Available in stock
+                    </label>
+                  </div>
+                  <div class="field">
+                    <label class="label">Price</label>
+                    <div class="control">
+                      <input type="number" min="0" name="actual_price" required class="input" placeholder="Enter Price" value="20">
+                    </div>
+                    <p class="help">Actual price of the product</p>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox">
+                      <!-- checked if discount value not null -->
+                      <input type="checkbox" name="has_discount" value="" id="discount_checkbox">
+                      On Sale
+                    </label>
+                  </div>
+                  <div class="field" id="discount_field">
+                    <!-- active if discount value not null -->
+                    <label class="label">Discount Price</label>
+                    <div class="control">
+                      <input type="number" name="discount_price" class="input" placeholder="Enter discounted price">
+                    </div>
+                    <p class="help">Discounted price, i.e final price after discount</p>
+                  </div>
+                  <div class="field is-grouped mt-4">
+                    <div class="control">
+                      <button type="submit" class="button is-primary">Update</button>
+                    </div>
+                    <div class="control">
+                      <a href="/admin/products/manage" class="button is-light">Cancel</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <script src="/js/create-product.js" charset="utf-8"></script>
+    <script src="/js/delete-modal.js" charset="utf-8"></script>
+  </body>
+</html>

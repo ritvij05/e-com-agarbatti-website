@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Manage Products</title>
+    <%- include('../.././partials/admin-css-links') -%>
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <p class="navbar-item">Welcome username</p>
+          <a href="#" class="navbar-item">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div id="parentcontainer" data-id="manage-products">
+        <%- include('../.././partials/admin-sidemenu') -%>
+        <div id="main_content">
+          <div class="modal" id="deletemodal">
+            <div class="modal-background close_modal">
+
+            </div>
+            <div class="modal-content">
+              <div class="box has-text-centered">
+                <p class="has-text-danger"><span class="icon is-large"><i class="fas fa-exclamation-circle fa-2x"></i> </span></p>
+                <p class="title has-text-weight-normal">Are you sure you want to delete the product?</p>
+                <p>This action cannot be undone. Please be careful with it.</p>
+                <div class="mt-4">
+                  <!-- delete krne ke liye id pass karega sirf -->
+                  <form style="display: inline;" action="/admin/products/delete" method="post">
+                    <input type="hidden" name="deleteid" id="deleteid" value="">
+                    <button type="button" class="button is-success mr-4 close_modal">Cancel</button>
+                    <button type="submit" class="button is-danger">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <% const m = getMessages() %>
+            <% if(m.error){ %>
+              <% m.error.forEach((element) => { %>
+                <div class="notification has-text-centered is-danger">
+                  <button class="delete"></button>
+                  <p class="is-size-5"><%= element %></p>
+                </div>
+              <% }) %>
+            <% } %>
+            <% if(m.success){ %>
+              <% m.success.forEach((element) => { %>
+                <div class="notification has-text-centered is-success">
+                  <button class="delete"></button>
+                  <p class="is-size-5"><%= element %></p>
+                </div>
+              <% }) %>
+            <% } %>
+            <div>
+              <p class="title has-text-weight-normal is-flex is-justify-content-space-between">
+                <span>Manage Products</span>
+                <a href="/admin/products/create" class="button is-link">
+                  <span class="icon">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span>Add Product</span>
+                </a>
+              </p>
+              <hr>
+            </div>
+            <div id="product_results">
+              <!-- products to be added here -->
+              <div class="card mb-3 parenttosearch" data-id="1">
+                <div class="card-content">
+                  <div class="columns">
+                    <div class="column">
+                      <p class="is-size-4">Product Name</p>
+                      <p class="is-size-5 has-text-weight-light">Company Name</p>
+                      <div class="columns mt-0">
+                        <div class="column">
+                          <p>Category Name</p>
+                        </div>
+                        <div class="column">
+                          <p>Price: <span class="original_price">&#8377; 20</span> <span class="discounted_price has-text-weight-semibold">&#8377; 15</span></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="column is-narrow has-text-centered has-text-right-tablet">
+                      <img src="/images/product.jfif" alt="">
+                    </div>
+                  </div>
+                  <div class="columns">
+                    <div class="column">
+                      <p class="has-text-success"><span class="icon-text"><span class="icon"><i class="fas fa-check-square"></i></span><span>In stock</span> </span> </p>
+                    </div>
+                    <div class="column is-narrow">
+                      <a href="/admin/products/edit/1" class="button is-primary mr-2"><span class="icon is-medium"><i class="fas fa-pen"></i></span> </a>
+                      <button type="button" class="button deletebutton is-danger"><span class="icon is-medium"><i class="fas fa-trash"></i></span></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-3 parenttosearch" data-id="2">
+                <div class="card-content">
+                  <div class="columns">
+                    <div class="column">
+                      <p class="is-size-4">Product Name</p>
+                      <p class="is-size-5 has-text-weight-light">Company Name</p>
+                      <div class="columns mt-0">
+                        <div class="column">
+                          <p>Category Name</p>
+                        </div>
+                        <div class="column">
+                          <p>Price: <span class="original_price">&#8377; 20</span> <span class="discounted_price has-text-weight-semibold">&#8377; 15</span></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="column is-narrow has-text-centered has-text-right-tablet">
+                      <img src="/images/product.jfif" alt="">
+                    </div>
+                  </div>
+                  <div class="columns">
+                    <div class="column">
+                      <p class="has-text-success"><span class="icon-text"><span class="icon"><i class="fas fa-check-square"></i></span><span>In stock</span> </span> </p>
+                    </div>
+                    <div class="column is-narrow">
+                      <a href="/admin/products/edit/2" class="button is-primary mr-2"><span class="icon is-medium"><i class="fas fa-pen"></i></span> </a>
+                      <button type="button" class="button deletebutton is-danger"><span class="icon is-medium"><i class="fas fa-trash"></i></span></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <script src="/js/manage-products.js" charset="utf-8"></script>
+    <script src="/js/delete-modal.js" charset="utf-8"></script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+#parentcontainer{
+  display: grid;
+  grid-template-columns: 200px auto;
+}
+#sidemenu{
+  padding: 20px 15px;
+  background: #fcfcfc;
+  min-height: calc(100vh - 54px);
+}
+#main_content{
+  padding: 20px;
+}
+.is-narrow img{
+  width: 100px;
+}
+.original_price{
+  text-decoration: line-through;
+  font-style: italic;
+}
+.discounted_price{
+  font-size: 1.1em;
+}
+@media only screen and (max-width: 768px) {
+  #parentcontainer{
+    display: block;
+  }
+  #sidemenu{
+    min-height: auto;
+    width: 100%;
+  }
+}
