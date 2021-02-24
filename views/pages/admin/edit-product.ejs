@@ -31,20 +31,20 @@
             <div class="columns is-centered">
               <div id="create_div" class="column is-10-tablet is-6-desktop">
                 <div class="">
-                  <p class="title has-text-weight-normal">Editing product: Product Name</p>
+                  <p class="title has-text-weight-normal">Editing product: <%= products.name %></p>
                   <hr>
                 </div>
-                <form class="mt-4" action="/admin/products/edit/product_id" method="post">
+                <form class="mt-4" action="/admin/products/edit/<%= products.id %>" method="post">
                   <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
-                      <input type="text" name="name" id="name" class="input" required placeholder="Enter Product Name" value="Product Name">
+                      <input type="text" name="name" id="name" class="input" required placeholder="Enter Product Name" value="<%= products.name %>">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">Company Name</label>
                     <div class="control">
-                      <input type="text" name="company_name" id="company_name" required class="input" placeholder="Enter Company Name" value="Company Name">
+                      <input type="text" name="company_name" id="company_name" required class="input" placeholder="Enter Company Name" value="<%= products.company_name %>">
                     </div>
                   </div>
                   <div class="field">
@@ -52,21 +52,25 @@
                     <div class="select">
                       <select name="category_id" required>
                         <!-- jiska id match karega woh selected -->
-                        <option selected disabled>Select a category</option>
-                        <option value="1">Agarbatti</option>
-                        <option value="2">Dhoop</option>
-                        <option value="3">Something</option>
+                        <option disabled>Select a category</option>
+                        <% for (var i = 0; i < categories.length; i++) { %>
+                          <%if (products.category_id==categories[i].id) { %>
+                        <option selected value="<%= categories[i].id %>"><%= categories[i].name %></option>
+                        <%} else{%>
+                          <option value="<%= categories[i].id %>"><%= categories[i].name %></option>
+                          <%}}%>
+                        
                       </select>
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">Product Description</label>
                     <div class="control">
-                      <textarea name="description" class="textarea" required placeholder="Enter Product Description" rows="6">Product Description</textarea>
+                      <textarea name="description" class="textarea" required placeholder="Enter Product Description" rows="6" value="<%= products.description %>"><%= products.description %></textarea>
                     </div>
                     <p class="help">This will be changed into an iframe if needed later</p>
                   </div>
-                  <div class="field">
+                  <!-- <div class="field">
                     <div class="file has-name" id="images_input">
                       <label class="file-label">
                         <input type="file" class="file-input" name="images" multiple="true">
@@ -85,33 +89,46 @@
                     <div id="images-div">
                       <p>Idher images ayega uploaded wala</p>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="field mt-4">
                     <label class="checkbox">
                       <!-- checked if Available -->
-                      <input type="checkbox" name="in_stock" value="yes">
+                      <%if (products.in_stock>0) { %>
+                      <input type="checkbox" checked name="in_stock" value="1" id='in_stock_checkbox'>
+                      <%} else{%>
+                        <input type="checkbox" name="in_stock" value="0" id='in_stock_checkbox'>
+                        <%}%>
                       Available in stock
+                      
                     </label>
                   </div>
                   <div class="field">
                     <label class="label">Price</label>
                     <div class="control">
-                      <input type="number" min="0" name="actual_price" required class="input" placeholder="Enter Price" value="20">
+                      <input type="number" min="0" name="actual_price" required class="input" placeholder="Enter Price" value="<%= products.actual_price%>">
                     </div>
                     <p class="help">Actual price of the product</p>
                   </div>
                   <div class="field">
                     <label class="checkbox">
                       <!-- checked if discount value not null -->
-                      <input type="checkbox" name="has_discount" value="" id="discount_checkbox">
+                      <%if (products.discount_price>0) { %>
+                      <input type="checkbox"  checked name="has_discount" value="1" id="discount_checkbox">
+                      <%} else{%>
+                        <input type="checkbox" name="has_discount" value="" id="discount_checkbox">
+                        <%}%>
                       On Sale
                     </label>
                   </div>
-                  <div class="field" id="discount_field">
+                  <%if (products.discount_price>0) { %>
+                    <div class="field active" id="discount_field"></div>
+                    <%} else{%>
+                      <div class="field" id="discount_field"></div>
+                      <%}%>   
                     <!-- active if discount value not null -->
                     <label class="label">Discount Price</label>
                     <div class="control">
-                      <input type="number" name="discount_price" class="input" placeholder="Enter discounted price">
+                      <input type="number" name="discounted_price" class="input" value="<%= products.discount_price%>" placeholder="Enter discounted price">
                     </div>
                     <p class="help">Discounted price, i.e final price after discount</p>
                   </div>

@@ -38,7 +38,7 @@
                 <div class="mt-4">
                   <!-- delete krne ke liye id pass karega sirf -->
                   <form style="display: inline;" action="/admin/products/delete" method="post">
-                    <input type="hidden" name="deleteid" id="deleteid" value="">
+                    <input type="hidden" name="deleteid" id="deleteid" >
                     <button type="button" class="button is-success mr-4 close_modal">Cancel</button>
                     <button type="submit" class="button is-danger">Delete</button>
                   </form>
@@ -78,37 +78,49 @@
             </div>
             <div id="product_results">
               <!-- products to be added here -->
-              <div class="card mb-3 parenttosearch" data-id="1">
+              <% for (var i = 0; i < products.length; i++) { %>
+              <div class="card mb-3 parenttosearch" data-id="<%= products[i].id %>">
                 <div class="card-content">
                   <div class="columns">
                     <div class="column">
-                      <p class="is-size-4">Product Name</p>
-                      <p class="is-size-5 has-text-weight-light">Company Name</p>
+                      <p class="is-size-4"><%= products[i].name %></p>
+                      <p class="is-size-5 has-text-weight-light"><%= products[i].company_name %></p>
                       <div class="columns mt-0">
                         <div class="column">
-                          <p>Category Name</p>
+                          <% for (var j = 0; j < categories.length; j++) { if(categories[j].id==products[i].category_id){%>
+                          <p><%= categories[j].name %></p>
+                          <%}} %>
                         </div>
                         <div class="column">
-                          <p>Price: <span class="original_price">&#8377; 20</span> <span class="discounted_price has-text-weight-semibold">&#8377; 15</span></p>
+                          <%if (products[i].discount_price!==0) { %>
+                          <p>Price: <span class="original_price">&#8377; <%= products[i].actual_price %></span> <span class="discounted_price has-text-weight-semibold">&#8377; <%= products[i].discount_price %></span></p>
+                          <%} else{%>
+                          <p>Price: <span class="">&#8377; <%= products[i].actual_price %></span></p>
+                          <%}%>
                         </div>
                       </div>
                     </div>
                     <div class="column is-narrow has-text-centered has-text-right-tablet">
-                      <img src="/images/product.jfif" alt="">
+                      <img src="/images/products/<%= products[i].images[0] %>" alt="img">
                     </div>
                   </div>
                   <div class="columns">
                     <div class="column">
-                      <p class="has-text-success"><span class="icon-text"><span class="icon"><i class="fas fa-check-square"></i></span><span>In stock</span> </span> </p>
-                    </div>
+                      <%if (products[i].in_stock==1) { %>
+                      <p class="has-text-success"><span class="icon-text"><span class="icon"><i class="fas fa-check-square"></i></span><span>In stock</span></span></p>
+                      <%} else{%>
+                        <p class="has-text-danger"><span class="icon-text"><span class="icon"><i class="fas fa-window-close"></i></span><span>Not In stock</span></span></p>
+                        <%}%>
+                      </div>
                     <div class="column is-narrow">
-                      <a href="/admin/products/edit/1" class="button is-primary mr-2"><span class="icon is-medium"><i class="fas fa-pen"></i></span> </a>
+                      <a href="/admin/products/edit/<%= products[i].id %>" class="button is-primary mr-2"><span class="icon is-medium"><i class="fas fa-pen"></i></span> </a>
                       <button type="button" class="button deletebutton is-danger"><span class="icon is-medium"><i class="fas fa-trash"></i></span></button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="card mb-3 parenttosearch" data-id="2">
+              <% } %>
+              <!-- <div class="card mb-3 parenttosearch" data-id="2">
                 <div class="card-content">
                   <div class="columns">
                     <div class="column">
@@ -137,7 +149,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

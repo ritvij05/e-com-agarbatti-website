@@ -1,11 +1,15 @@
 const AdminModel = require('../models/adminModel');
 var validator = require("email-validator");
 
+const upload = require("../middleware/upload");
+const fs = require('fs-extra');
+
 var adminController = {
     showLoginPage:showLoginPage,
     showRegisterPage:showRegisterPage,
     registerPage:registerPage,
     login:login,
+    logout:logout,
     verifyUser:verifyUser,
     forgotPass:forgotPass,
     changePass:changePass,
@@ -21,13 +25,15 @@ var adminController = {
     createProduct:createProduct,
     storeProduct:storeProduct,
     editProduct:editProduct,
+    editProductImage:editProductImage,
     updateProduct:updateProduct,
     deleteProduct:deleteProduct,
+    uploadImages:uploadImages,
  }
 
 
 function showLoginPage(req,res) {
-    if(req.user){
+    if(req.session.admin){
         res.render('pages/admin/dashboard')
     }else{
         res.render('pages/admin/login');
@@ -35,16 +41,20 @@ function showLoginPage(req,res) {
 }
 
 function showRegisterPage(req,res) {
-    if(req.user){
-        res.render('pages/admin/dashboard')
+    if(req.session.admin){
+        res.render('pages/admin/register')
     }else{
-        res.render('pages/admin/register');
+        res.render('pages/admin/login');
     }
 }
 
 function dashboard(req, res){
   // check for user
-  res.render('pages/admin/dashboard');
+  if(req.session.admin){
+    res.render('pages/admin/dashboard')
+}else{
+    res.render('pages/admin/login');
+}
 }
 
 function changePass(req,res) {
@@ -100,8 +110,17 @@ function login(req, res){
               return;
             }
             else if(result.msg == "login successful"){
+              let name=result.results.name;
+              let id=result.results.id;
+              let admin={
+              id,
+              name,
+              email,
+              }
+              // res.setHeader('x-auth-token', token);
+              req.session.admin=admin;
               req.flash('success', 'Login Succesful');
-              res.redirect('/admin');
+              res.redirect('/admin/dashboard');
               return;
             }
             else{
@@ -112,6 +131,13 @@ function login(req, res){
         });
     }
 }
+
+function logout(req,res){
+  // req.session.destroy();
+  delete req.session.admin;
+  req.flash('success', 'Logout!');
+  res.redirect('/admin/login');
+};
 
 function forgotPass(req,res) {
     let {email }=req.body;
@@ -176,11 +202,21 @@ function verifyUser(req,res)
 // Manage Products & Categories
 function manageCategories(req,res)
 {                               // type -> send... add,del,update
-   let {type,id,name}=req.body; //send null id only while adding category
+   let {type,name,id}=req.body; //send null id only while adding category
+   if(type=='delete'){
+    id=req.body.deleteid;
+   }
    data={type,id,name};
    if(type =='' || name=='') res.json({err:'All Fields Are Mandatory...'});
    AdminModel.manageCategories(data,function(result){
-        res.json({data:result});
+        if(result.includes("UnSuccessful...")){
+          req.flash('error', result);
+          res.redirect('/admin/categories/manage');
+        }
+        else{
+        req.flash('success', result);
+        res.redirect('/admin/categories/manage');
+        }
    });
 }
 
@@ -188,7 +224,14 @@ function manageCategories(req,res)
 // categories
 function showCategories(req, res){
   // get all categories here
-  res.render('pages/admin/manage-categories');
+  AdminModel.showCategories(function(result){
+    if(result=='error'){
+      req.flash('error', 'Unable To Load Categories...');
+      res.redirect('/admin/dashboard');
+    }
+    res.render('pages/admin/manage-categories',{categories:result});
+  });
+
 }
 
 function storeCategory(req, res){
@@ -199,7 +242,14 @@ function storeCategory(req, res){
 }
 
 function editCategory(req, res){
-  res.render('pages/admin/edit-category');
+  AdminModel.editCategory(req,function(result){
+    if(result=='error'){
+      req.flash('error', 'Unsuccessful...');
+      res.redirect('/admin/categories/manage');
+    }
+    res.render('pages/admin/edit-category',{categories:result});
+  });
+ 
 }
 
 function updateCategory(req, res){
@@ -217,35 +267,186 @@ function deleteCategory(req, res){
 // products
 function manageProducts(req, res){
   // get all products here
-  res.render('pages/admin/manage-products');
+  AdminModel.manageProducts(function(result){
+    if(result=='error'){
+      req.flash('error', 'Unsuccessful');
+      res.redirect('/admin/dashboard');
+    }else{
+      AdminModel.showCategories(function(data){
+        if(result=='error'){
+          req.flash('error', 'Unsuccessful');
+          res.redirect('/admin/dashboard');
+        }
+        // console.log(result[0]);
+        res.render('pages/admin/manage-products',{products:result,categories:data});
+      });
+    }
+  });
+  
 }
 
 function createProduct(req, res){
   // categories list, companies list
-  res.render('pages/admin/create-product');
+  AdminModel.showCategories(function(result){
+    if(result=='error'){
+      req.flash('error', 'Unsuccessful');
+      res.redirect('/admin/products/manage');
+    }
+    else{
+    res.render('pages/admin/create-product',{categories:result});
+    }
+  });
 }
+
+function uploadImages(req,res){
+  var dir = './public/images/products/'+req.params.id;
+  if(!fs.existsSync(dir))
+  {
+    fs.mkdirs(dir, function (err) {
+        if (err) {
+          req.flash('error', 'Unsuccessful...');
+          res.redirect('/admin/products/manage');
+        } 
+      });
+  }
+  upload(req, res,function(err){
+    if (err) {
+      // fs.rmdir('./public/images/products/'+req.params.id);
+      req.flash('error', 'Unsuccessful...');
+      res.redirect('/admin/products/manage');
+    }
+    else{
+      // console.log(req.files[0].filename);
+      AdminModel.uploadImages(req,function(result){
+        if(result!=='Product Images Added...'){
+          // fs.rmdir('./public/images/products/'+req.params.id);
+          req.flash('error', 'Unsuccessful...');
+          res.redirect('/admin/products/manage');
+        }
+        req.flash('success', 'Product Images added successfully...');
+        res.redirect('/admin/products/manage');
+      });
+    }
+  });
+};
+
 
 function storeProduct(req, res){
   // store product here
   // returning to manage page for now
-  req.flash('success', 'Product added successfully');
-  res.redirect('/admin/products/manage');
+  let {name,company_name,description,in_stock,actual_price,discounted_price,category_id}=req.body;
+  var arr =[];
+  if(name=='' || company_name=='' || description=='' || in_stock=='' || actual_price==''  || category_id==''){
+    arr.push("Please fill in all the fields first");
+  }
+  if(in_stock!=='1'){
+    in_stock='0';
+  }
+  let data={ name,
+      company_name,
+      description,
+      in_stock,
+      actual_price,
+      discounted_price,
+      category_id,
+      }
+  if(arr.length){
+    req.flash('error', arr[0]);
+    res.redirect('/admin/products/create');
+  }
+  else{
+      AdminModel.storeProduct(data,function(result){
+          if(result == 'Product Addition Successful...'){
+            req.flash('success', 'Product Addition Successful...');
+            res.redirect('/admin/products/manage');
+          }
+          else{
+          req.flash('error'," Product Addition UnSuccessful...");
+          res.redirect('/admin/products/create');
+          }
+      });
+  }
+//   req.flash('success', 'Product added successfully');
+//   res.redirect('/admin/products/manage');
+}
+
+function editProductImage(req, res){
+  res.render('pages/admin/test',{id:req.params.id});
 }
 
 function editProduct(req, res){
-  res.render('pages/admin/edit-product');
+  AdminModel.editProduct(req,function(result){
+    if(result=='error'){
+      req.flash('error', 'Unsuccessful...');
+      res.redirect('/admin/products/manage');
+    }
+    AdminModel.showCategories(function(data){
+      if(result=='error'){
+        req.flash('error', 'Unsuccessful...');
+        res.redirect('/admin/products/manage');
+      }
+      // console.log(result[0]);
+      res.render('pages/admin/edit-product',{products:result[0],categories:data});
+    });
+  });
 }
 
+
 function updateProduct(req, res){
-  // store product here
+    // store product here
   // returning to manage page for now
-  req.flash('success', 'Product updated successfully');
-  res.redirect('/admin/products/manage');
+  let {name,company_name,description,in_stock,actual_price,discounted_price,category_id,has_discount}=req.body;
+
+  var arr =[];
+  if(name=='' || company_name=='' || description=='' || in_stock=='' || actual_price==''  || category_id==''){
+    arr.push("Please fill in all the fields first");
+  }
+  if(in_stock!=='1'){
+    in_stock='0';
+  }
+  if(has_discount!=='1'){
+    discounted_price=0;
+  }
+  let id=req.params.id;
+  let data={ name,
+      company_name,
+      description,
+      in_stock,
+      actual_price,
+      discounted_price,
+      category_id,
+      id,
+      }
+  if(arr.length){
+    req.flash('error', arr[0]);
+    res.redirect('/admin/products/edit/'+req.params.id);
+  }
+  else{
+      AdminModel.updateProduct(data,function(result){
+          if(result == 'Product Update Successful...'){
+            req.flash('success', result);
+            res.redirect('/admin/products/manage');
+          }
+          else{
+          req.flash('error'," Product Update UnSuccessful...");
+          res.redirect('/admin/products/edit/'+req.params.id);
+          }
+      });
+  }
 }
 
 function deleteProduct(req, res){
-  req.flash('error', 'Product deleted successfully');
-  res.redirect('/admin/products/manage');
+  let{deleteid}=req.body;
+  AdminModel.deleteProduct(deleteid,function(result){
+            if(result=='error'){
+              req.flash('error', 'Product Deletion UnSuccessfully...');
+              res.redirect('/admin/products/manage');
+            }else{
+            fs.rmdir('./public/images/products/'+deleteid, { recursive: true });
+            req.flash('success', 'Product Deletion Successfully...');
+            res.redirect('/admin/products/manage');
+            }
+       });
 }
 
 // function manageProducts(req,res)

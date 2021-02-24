@@ -172,29 +172,154 @@ AdminModel.verifyUser = function(request, result){
 });
 }
 
-// Manage Products & Categories
-
-
-// @desc   Verify User Account
+// Categories
+// @desc   Manage Categories
 // @access Private
 AdminModel.manageCategories = function(data,result){
   if(data.type=='add'){
     connectDB.query(`insert into categories (name) values ('${data.name}')`,(err,results)=>{
-      if(err) return result(err);
+      if(err){
+        console.log(err);
+        return result('Category Addition UnSuccessful...');
+      }
       return result('Category Addition Successful...');
     });
   }else if(data.type=='update'){
     connectDB.query(`update categories set name='${data.name}' where id='${data.id}'`,(err,results)=>{
-      if(err) return result(err);
+      if(err){
+        console.log(err);
+        return result('Category Updation UnSuccessful...');
+      }
       return result('Category Updation Successful...');
     });
   }else{
-    connectDB.query(`delete from categories where name='${data.name}' and id='${data.id}'`,(err,results)=>{
-      if(err) return result(err);
+    connectDB.query(`delete from categories where id='${data.id}'`,(err,results)=>{
+      if(err){
+        console.log(err);
+        return result('Category Deletion UnSuccessful...');
+      }
       return result('Category Deletion Successful...');
     });
   }
 }
+
+//@desc Get All categores
+AdminModel.showCategories = function(result){
+  connectDB.query(`select * from categories`,(err,results)=>{
+    if(err) {
+      console.log(err)
+      return result('error');
+    }
+    return result(results);
+  });
+
+}
+
+//@desc Get single categores
+AdminModel.editCategory = function(req,result){
+  connectDB.query(`select * from categories where id='${req.params.id}'`,(err,results)=>{
+    if(err) {
+      console.log(err)
+      return result('error');
+    }
+    return result(results);
+  });
+
+}
+
+// products
+// @desc   Store Products
+// @access Private
+AdminModel.storeProduct = function(data,result){
+    connectDB.query(`insert into products (category_id,name,company_name,description,in_stock,actual_price,discount_price)values ('${data.category_id}','${data.name}','${data.company_name}','${data.description}','${data.in_stock}','${data.actual_price}','${data.discounted_price}')`,(err,results)=>{
+      if(err) {
+        console.log(err);
+        return result('error');
+      };
+      return result('Product Addition Successful...');
+    });
+  
+}
+
+// @desc   Update Products
+// @access Private
+AdminModel.updateProduct = function(data,result){
+  connectDB.query(`update products set category_id='${data.category_id}',name='${data.name}',company_name='${data.company_name}',description='${data.description}',in_stock='${data.in_stock}',actual_price='${data.actual_price}',discount_price='${data.discounted_price}' where id='${data.id}'`,(err,results)=>{
+    if(err) {
+      console.log(err);
+      return result('error');
+    };
+    return result('Product Update Successful...');
+  });
+
+}
+
+//@desc Get All products
+AdminModel.manageProducts = function(result){
+  connectDB.query(`select * from products`,(err,results)=>{
+    if(err) {
+      console.log(err)
+      return result('error');
+    }
+
+    for(var i=0; i< results.length; i++){
+      if(results[i].images){
+        results[i].images=results[i].images.split(",");
+      }
+    }
+    return result(results);
+  });
+
+}
+
+//@desc Get single Product
+AdminModel.editProduct = function(req,result){
+  connectDB.query(`select * from products where id='${req.params.id}'`,(err,results)=>{
+    if(err) {
+      console.log(err)
+      return result('error');
+    }
+    return result(results);
+  });
+}
+
+//@desc delete product
+AdminModel.deleteProduct = function(id,result){
+  connectDB.query(`delete from products where id='${id}'`,(err,results)=>{
+    if(err) {
+      console.log(err);
+      return result('error');
+    }
+    return result('Product Deletion Successful');
+  });
+
+}
+
+//@desc Upload/Update Images
+AdminModel.uploadImages = function(request,result){
+  connectDB.query(`select images from products where id='${request.params.id}'`,(err,results)=>{
+    let arr =[];
+    if(err){
+      return result(err);
+    }else{ 
+      if(results[0].images){
+        // arr.push(JSON.parse(results[0].images))
+        arr.push(results[0].images);
+      }
+      for(var i = 0; i < request.files.length; i++){
+        arr.push(request.params.id+'/'+request.files[i].filename)
+        // arr.push(request.files[i].filename)
+      }
+      // console.log(arr);
+    }
+    // let path='/images/products/'+request.params.id;
+    connectDB.query(`update products set images='${arr}' where id='${request.params.id}'`,(err,results)=>{
+      if(err) return result(err);
+      return result('Product Images Added...')
+    });
+  });
+}
+
 
 
 module.exports = AdminModel;

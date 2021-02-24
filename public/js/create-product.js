@@ -1,4 +1,24 @@
 $(document).ready(function(){
+  $('#discount_checkbox').change(function(){
+    if(this.checked){
+      $('#discount_checkbox').val('1');
+      $('#discount_field').addClass('active');
+    }
+    else{
+      $('#discount_checkbox').val('0');
+      $('#discount_field').removeClass('active');
+    }
+  });
+
+  $('#in_stock_checkbox').change(function(){
+    if(this.checked){
+      $('#in_stock_checkbox').val('1');
+    }
+    else{
+      $('#in_stock_checkbox').val('0');
+    }
+  });
+  
   var images = document.querySelector('#images_input input[type=file]');
   images.onchange = () => {
     $('#images-div').html('');
@@ -22,13 +42,4 @@ $(document).ready(function(){
       $('#images-div').html('<p>No files selected</p>');
     }
   }
-
-  $('#discount_checkbox').change(function(){
-    if(this.checked){
-      $('#discount_field').addClass('active');
-    }
-    else{
-      $('#discount_field').removeClass('active');
-    }
-  });
 });
