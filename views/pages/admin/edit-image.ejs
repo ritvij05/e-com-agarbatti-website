@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Edit Product</title>
+    <%- include('../.././partials/admin-css-links') -%>
+    <link rel="stylesheet" href="/css/upload_images.css">
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <p class="navbar-item">Welcome username</p>
+          <a href="#" class="navbar-item">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div id="parentcontainer" data-id="edit-images">
+        <%- include('../.././partials/admin-sidemenu') -%>
+        <div id="main_content">
+          <div class="container">
+            <%- include('../.././partials/notifications') -%>
+            <br>
+            <div class="columns is-centered">
+              <div id="create_div" class="column is-10-tablet">
+                <div class="">
+                  <p class="title has-text-weight-normal">Images for: <%= product.name %></p>
+                  <hr>
+                </div>
+                <form class="mt-4" action="/admin/products/upload/<%= product.id %>" method="post" enctype="multipart/form-data">
+                  <div class="field mb-4">
+                    <div class="file has-name" id="images_input">
+                      <label class="file-label">
+                        <input type="file" class="file-input" name="files" multiple="true" required>
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                          </span>
+                          <span class="file-label">Upload Product Images</span>
+                        </span>
+                        <span class="file-name">No File Uploaded</span>
+                      </label>
+                    </div>
+                    <p class="help">Maximum 10 images allowed</p>
+                  </div>
+                  <div class="field mb-4">
+                    <label class="label">Images Preview</label>
+                    <div id="images-div">
+                      <p>Upload images to preview them here</p>
+                    </div>
+                  </div>
+                  <div class="field is-grouped mt-4">
+                    <div class="control">
+                      <button type="submit" class="button is-primary">Update</button>
+                    </div>
+                    <div class="control">
+                      <a href="/admin/products/manage" class="button is-light">Back</a>
+                    </div>
+                  </div>
+                  <div class="field mt-6">
+                    <label class="label">Uploaded Product Images</label>
+                    <p class="help">Click on the 'x' button to permanently remove the image</p>
+                    <div id="uploaded-images-div">
+                      <% var images = product.images; %>
+                      <% if(images != null){ %>
+                        <% images = images.split(","); %>
+                        <% var images_len = images.length %>
+                        <% for(var i = 0; i < images_len; i++){ %>
+                          <div class="uploaded-image" data-name="<%= images[i] %>">
+                            <img src="/images/products/<%= images[i] %>" alt="">
+                            <button type="button" class="delete"></button>
+                          </div>
+                        <% } %>
+                      <% }else{ %>
+                        <p>Uploaded images will be seen here</p>
+                      <% } %>
+                    </div>
+                  </div>
+                </form>
+                <input type="hidden" name="product_id" id="product_id" value="<%= product.id %>">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <script src="/js/upload-images.js" charset="utf-8"></script>
+    <script src="/js/delete-modal.js" charset="utf-8"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+<% const m = getMessages() %>
+<% if(m.error){ %>
+  <% m.error.forEach((element) => { %>
+    <div class="notification has-text-centered is-danger">
+      <p class="is-size-5"><%= element %></p>
+    </div>
+  <% }) %>
+<% } %>
+<% if(m.success){ %>
+  <% m.success.forEach((element) => { %>
+    <div class="notification has-text-centered is-success">
+      <p class="is-size-5"><%= element %></p>
+    </div>
+  <% }) %>
+<% } %>

@@ -75,24 +75,9 @@
             </div>
           </div>
           <div class="container">
-            <% const m = getMessages() %>
-            <% if(m.error){ %>
-              <% m.error.forEach((element) => { %>
-                <div class="notification has-text-centered is-danger">
-                  <button class="delete"></button>
-                  <p class="is-size-5"><%= element %></p>
-                </div>
-              <% }) %>
-            <% } %>
-            <% if(m.success){ %>
-              <% m.success.forEach((element) => { %>
-                <div class="notification has-text-centered is-success">
-                  <button class="delete"></button>
-                  <p class="is-size-5"><%= element %></p>
-                </div>
-              <% }) %>
-            <% } %>
+            <%- include('../.././partials/notifications') -%>
             <div>
+              <br>
               <p class="title has-text-weight-normal is-flex is-justify-content-space-between">
                 <span>Manage Categories</span>
                 <button data-target="createmodal" class="modal_trigger button is-link">

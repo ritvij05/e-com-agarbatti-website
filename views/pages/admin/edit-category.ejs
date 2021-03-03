@@ -27,6 +27,7 @@
         <%- include('../.././partials/admin-sidemenu') -%>
         <div id="main_content">
           <div class="container">
+            <br>
             <div class="columns is-centered">
               <div id="create_div" class="column is-10-tablet is-6-desktop">
                 <div class="">
@@ -39,7 +40,7 @@
                   <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
-                      <input type="text" required class="input" name="name" placeholder="Enter Category Name" >
+                      <input type="text" required class="input" name="name" placeholder="Enter Category Name" value="<%= categories[0].name %>">
                     </div>
                   </div>
                   <div class="field is-grouped">

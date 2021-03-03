@@ -2,9 +2,8 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Edit Product</title>
+    <title>Write a response</title>
     <%- include('../.././partials/admin-css-links') -%>
-    <link rel="stylesheet" href="/css/create_product.css">
   </head>
   <body>
     <nav class="navbar is-dark">
@@ -24,44 +23,45 @@
       </div>
     </nav>
     <main>
-      <div id="parentcontainer" data-id="edit-product">
+      <div id="parentcontainer" data-id="write-response">
         <%- include('../.././partials/admin-sidemenu') -%>
         <div id="main_content">
           <div class="container">
+            <br>
             <div class="columns is-centered">
               <div id="create_div" class="column is-10-tablet is-6-desktop">
                 <div class="">
-                  <p class="title has-text-weight-normal">Editing product: Product Name</p>
+                  <p class="title has-text-weight-normal">Writing response for: <%= query.name %></p>
                   <hr>
                 </div>
-                <form class="mt-4" action="/admin/products/upload/<%= id %>" method="post" enctype="multipart/form-data">
-                  
-                  <div class="field">
-                    <div class="file has-name" id="images_input">
-                      <label class="file-label">
-                        <input type="file" class="file-input" name="files" multiple="true">
-                        <span class="file-cta">
-                          <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                          </span>
-                          <span class="file-label">Upload Product Images</span>
-                        </span>
-                        <span class="file-name">No File Uploaded</span>
-                      </label>
+                <form class="mt-4" action="/admin/queries/submit" method="post">
+                  <input type="hidden" name="id" id="id" value="<%= query.id %>">
+                  <input type="hidden" name="type" id="type" value="update">
+                  <div class="field mb-4">
+                    <label class="label">Name:</label>
+                    <div class="control py-1">
+                      <p><%= query.name %></p>
                     </div>
                   </div>
-                  <div class="field">
-                    <label class="label">Images Preview</label>
-                    <div id="images-div">
-                      <p>Idher images ayega uploaded wala</p>
+                  <div class="field mb-4">
+                    <label class="label">Question:</label>
+                    <div class="control py-1">
+                      <p><%= query.question %></p>
+                    </div>
+                    <p class="help">Line break kaise kru?</p>
+                  </div>
+                  <div class="field mb-4">
+                    <label class="label">Response:</label>
+                    <div class="control">
+                      <textarea class="textarea" name="response" id="response" rows="8" placeholder="Enter a response here"></textarea>
                     </div>
                   </div>
-                  <div class="field is-grouped mt-4">
+                  <div class="field is-grouped">
                     <div class="control">
-                      <button type="submit" class="button is-primary">Update</button>
+                      <button type="submit" class="button is-primary">Send Email</button>
                     </div>
                     <div class="control">
-                      <a href="/admin/products/manage" class="button is-light">Cancel</a>
+                      <a href="/admin/queries/manage" class="button is-light">Cancel</a>
                     </div>
                   </div>
                 </form>
@@ -72,7 +72,6 @@
       </div>
     </main>
     <%- include('../.././partials/admin-js-links') -%>
-    <script src="/js/create-product.js" charset="utf-8"></script>
     <script src="/js/delete-modal.js" charset="utf-8"></script>
   </body>
 </html>

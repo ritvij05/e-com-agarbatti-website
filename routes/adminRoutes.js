@@ -32,10 +32,16 @@ router.get('/categories/edit/:id',adminController.editCategory);
 router.get('/products/manage',adminController.manageProducts);
 router.get('/products/create',adminController.createProduct);
 router.post('/products/create',adminController.storeProduct);
-router.get('/products/editImage/:id',adminController.editProductImage);
 router.get('/products/edit/:id',adminController.editProduct);
+router.get('/products/editImage/:id',adminController.editProductImage);
+router.post('/products/upload/:id',adminController.uploadImages);
 router.post('/products/edit/:id',adminController.updateProduct);
 router.post('/products/delete',adminController.deleteProduct);
-router.post('/products/upload/:id',adminController.uploadImages);
+router.post('/products/deleteImage',adminController.deleteProductImage);
+
+// queries routes
+router.get('/queries/manage',adminController.manageQueries);
+router.get('/queries/write/:id',adminController.writeQueryResponse);
+router.post('/queries/submit',adminController.submitQueryResponse);
 
 module.exports = router;

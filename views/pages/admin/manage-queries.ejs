@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Queries</title>
+    <%- include('../.././partials/admin-css-links') -%>
+    <link rel="stylesheet" href="/css/manage-queries.css">
+  </head>
+  <body>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <b class="navbar-item">Agarbatti</b>
+        <a role="button" class="navbar-burger" id="navburger" aria-label="menu" aria-expanded="false" data-target="hammenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navmenu">
+        <div class="navbar-end">
+          <p class="navbar-item">Welcome username</p>
+          <a href="#" class="navbar-item">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div id="parentcontainer" data-id="manage-queries">
+        <%- include('../.././partials/admin-sidemenu') -%>
+        <div id="main_content">
+          <div class="modal" id="deletemodal">
+            <div class="modal-background close_modal">
+
+            </div>
+            <div class="modal-content">
+              <div class="box has-text-centered">
+                <p class="has-text-danger"><span class="icon is-large"><i class="fas fa-exclamation-circle fa-2x"></i> </span></p>
+                <p class="title has-text-weight-normal">Are you sure you want to delete the query?</p>
+                <p>This action cannot be undone. Please be careful with it.</p>
+                <div class="mt-4">
+                  <!-- delete krne ke liye id pass karega sirf -->
+                  <form style="display: inline;" action="/admin/products/delete" method="post">
+                    <input type="hidden" name="deleteid" id="deleteid" >
+                    <button type="button" class="button is-success mr-4 close_modal">Cancel</button>
+                    <button type="submit" class="button is-danger">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <div class="columns">
+              <div class="column is-12-tablet is-10-desktop is-offset-1-desktop">
+                <%- include('../.././partials/notifications') -%>
+                <div>
+                  <br>
+                  <p class="title has-text-weight-normal is-flex is-justify-content-space-between">
+                    <span>Manage User Queries</span>
+                  </p>
+                  <hr>
+                </div>
+                <div id="query_results">
+                  <!-- products to be added here -->
+                  <% var query_len = queries.length %>
+                  <% for (var i = 0; i < query_len; i++) { %>
+                  <div class="card mb-3 parenttosearch" data-id="<%= queries[i].id %>">
+                    <div class="card-content">
+                      <div class="mb-4">
+                        <p class="is-size-4">
+                          <span><%= queries[i].name %></span>
+                          <% if(queries[i].status == 0){ %>
+                            <span class="tag is-pulled-right is-warning has-text-white">Pending</span>
+                          <% } else{ %>
+                            <span class="tag is-pulled-right is-success">Solved</span>
+                          <% } %>
+                        </p>
+                      </div>
+                      <div class="mb-2">
+                        <p><i><%= queries[i].email %></i></p>
+                      </div>
+                      <div class="">
+                        <p><b>Order ID: </b>#<%= queries[i].order_id %> (will link to the order)</p>
+                      </div>
+                      <div class="question has-background-white-bis">
+                        <p><b>Question:</b></p>
+                        <p class=""><%- queries[i].question %></p>
+                      </div>
+                        <div class="">
+                          <% if(queries[i].status == 0){ %>
+                          <a href="/admin/queries/write/<%= queries[i].id %>" class="button is-link mr-2">
+                            <span class="icon is-small">
+                              <i class="fas fa-reply"></i>
+                            </span>
+                            <span>Write a response</span>
+                          </a>
+                          <% } %>
+                          <button type="button" class="button is-danger">
+                            <span class="icon is-small">
+                              <i class="fas fa-trash"></i>
+                            </span>
+                            <span>Delete Query</span>
+                          </button>
+                          <div class="is-pulled-right">
+                            <% var d = queries[i].created_at %>
+                            <p class="help"><%= d.toLocaleString() %></p>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../.././partials/admin-js-links') -%>
+    <!-- <script src="/js/manage-products.js" charset="utf-8"></script> -->
+    <script src="/js/delete-modal.js" charset="utf-8"></script>
+  </body>
+</html>

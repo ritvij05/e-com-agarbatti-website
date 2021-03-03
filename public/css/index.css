@@ -1,0 +1,6 @@
+.notification{
+  cursor: pointer !important;
+}
+.notification:hover{
+  filter: grayscale(20%);
+}

@@ -29,12 +29,17 @@ var adminController = {
     updateProduct:updateProduct,
     deleteProduct:deleteProduct,
     uploadImages:uploadImages,
+    deleteProductImage:deleteProductImage,
+    manageQueries:manageQueries,
+    writeQueryResponse:writeQueryResponse,
+    submitQueryResponse:submitQueryResponse,
  }
 
 
 function showLoginPage(req,res) {
     if(req.session.admin){
-        res.render('pages/admin/dashboard')
+        // res.render('pages/admin/dashboard');
+        res.redirect('/admin/dashboard');
     }else{
         res.render('pages/admin/login');
     }
@@ -42,19 +47,21 @@ function showLoginPage(req,res) {
 
 function showRegisterPage(req,res) {
     if(req.session.admin){
-        res.render('pages/admin/register')
+        // res.render('pages/admin/dashboard')
+        res.redirect('/admin/dashboard');
     }else{
-        res.render('pages/admin/login');
+        res.render('pages/admin/register');
     }
 }
 
 function dashboard(req, res){
   // check for user
   if(req.session.admin){
-    res.render('pages/admin/dashboard')
-}else{
-    res.render('pages/admin/login');
-}
+    res.render('pages/admin/dashboard');
+  }else{
+      // res.render('pages/admin/login');
+      res.redirect('/admin/login');
+  }
 }
 
 function changePass(req,res) {
@@ -249,7 +256,7 @@ function editCategory(req, res){
     }
     res.render('pages/admin/edit-category',{categories:result});
   });
- 
+
 }
 
 function updateCategory(req, res){
@@ -282,7 +289,7 @@ function manageProducts(req, res){
       });
     }
   });
-  
+
 }
 
 function createProduct(req, res){
@@ -306,7 +313,7 @@ function uploadImages(req,res){
         if (err) {
           req.flash('error', 'Unsuccessful...');
           res.redirect('/admin/products/manage');
-        } 
+        }
       });
   }
   upload(req, res,function(err){
@@ -318,18 +325,34 @@ function uploadImages(req,res){
     else{
       // console.log(req.files[0].filename);
       AdminModel.uploadImages(req,function(result){
-        if(result!=='Product Images Added...'){
+        if(result == 'Array Full'){
+          req.flash('error', 'Maximum 10 images allowed!');
+          res.redirect('/admin/products/manage');
+        }
+        else if(result !== 'Product Images Added...'){
           // fs.rmdir('./public/images/products/'+req.params.id);
           req.flash('error', 'Unsuccessful...');
           res.redirect('/admin/products/manage');
         }
-        req.flash('success', 'Product Images added successfully...');
-        res.redirect('/admin/products/manage');
+        req.flash('success', 'Images added successfully');
+        res.redirect('/admin/products/editImage/'+req.params.id);
       });
     }
   });
 };
 
+function deleteProductImage(req, res){
+  AdminModel.deleteImage(req, function(result){
+    if(result == 'image deleted'){
+      try {
+        fs.unlink('./public/images/products/'+req.body.name);
+        return res.json('done');
+      } catch (e) {
+        return res.json('error');
+      }
+    }
+  });
+}
 
 function storeProduct(req, res){
   // store product here
@@ -371,11 +394,18 @@ function storeProduct(req, res){
 }
 
 function editProductImage(req, res){
-  res.render('pages/admin/test',{id:req.params.id});
+  AdminModel.getProduct(req, function(result){
+    if(result == 'error'){
+      req.flash('error', 'Some error occured...');
+      res.redirect('/admin/products/manage');
+    }
+    res.render('pages/admin/edit-image',{product: result[0]});
+  });
 }
 
 function editProduct(req, res){
-  AdminModel.editProduct(req,function(result){
+  // renamed editProduct to getProduct as it does the job of returning a product, can be used multiple times
+  AdminModel.getProduct(req,function(result){
     if(result=='error'){
       req.flash('error', 'Unsuccessful...');
       res.redirect('/admin/products/manage');
@@ -447,6 +477,44 @@ function deleteProduct(req, res){
             res.redirect('/admin/products/manage');
             }
        });
+}
+
+function manageQueries(req, res){
+  // get all queries here
+  AdminModel.getQueries(function(result){
+    if(result=='error'){
+      req.flash('error', 'Unsuccessful');
+      res.redirect('/admin/dashboard');
+    }else{
+      res.render('pages/admin/manage-queries',{queries:result});
+    }
+  });
+}
+
+function writeQueryResponse(req, res){
+  AdminModel.getQuery(req, function(result){
+    if(result == 'error'){
+      req.flash('error', 'Some error occured...');
+      res.redirect('/admin/queries/manage');
+    }
+    res.render('pages/admin/write-response',{query: result[0]});
+  });
+}
+
+function submitQueryResponse(req, res){
+  AdminModel.updateQuery(req, function(result){
+    if(result == 'query updated'){
+      // status updated
+      // send an email here
+      req.flash('success', 'Response Sent Succesfully');
+      res.redirect('/admin/queries/manage');
+    }
+    else{
+      // status not updated
+      req.flash('error', 'Some error occured...');
+      res.redirect('/admin/queries/manage');
+    }
+  });
 }
 
 // function manageProducts(req,res)

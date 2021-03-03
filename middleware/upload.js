@@ -13,9 +13,9 @@ var storage=multer.diskStorage({
             var message = `${file.originalname} is invalid. Only accept png/jpeg.`;
             return callback(message, null);
         }
-        
-        // var filename = `${Date.now()}-${req.params.id}-${file.originalname}`;
-        var filename = `${Date.now()}-${req.params.id}.png`;
+
+        var filename = `${Date.now()}-${req.params.id}-${file.originalname}`;
+        // var filename = `${Date.now()}-${req.params.id}.png`;
         callback(null,filename);
     }
 });

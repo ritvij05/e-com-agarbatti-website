@@ -47,24 +47,9 @@
             </div>
           </div>
           <div class="container">
-            <% const m = getMessages() %>
-            <% if(m.error){ %>
-              <% m.error.forEach((element) => { %>
-                <div class="notification has-text-centered is-danger">
-                  <button class="delete"></button>
-                  <p class="is-size-5"><%= element %></p>
-                </div>
-              <% }) %>
-            <% } %>
-            <% if(m.success){ %>
-              <% m.success.forEach((element) => { %>
-                <div class="notification has-text-centered is-success">
-                  <button class="delete"></button>
-                  <p class="is-size-5"><%= element %></p>
-                </div>
-              <% }) %>
-            <% } %>
+            <%- include('../.././partials/notifications') -%>
             <div>
+              <br>
               <p class="title has-text-weight-normal is-flex is-justify-content-space-between">
                 <span>Manage Products</span>
                 <a href="/admin/products/create" class="button is-link">
@@ -101,7 +86,11 @@
                       </div>
                     </div>
                     <div class="column is-narrow has-text-centered has-text-right-tablet">
-                      <img src="/images/products/<%= products[i].images[0] %>" alt="img">
+                      <% if(products[i].images != null){ %>
+                        <img src="/images/products/<%= products[i].images[0] %>" alt="img">
+                      <% } else{ %>
+                        <span>No Image Uploaded</span>
+                      <% } %>
                     </div>
                   </div>
                   <div class="columns">
@@ -113,6 +102,7 @@
                         <%}%>
                       </div>
                     <div class="column is-narrow">
+                      <a href="/admin/products/editImage/<%= products[i].id %>" class="button is-link mr-2">Upload Images</a>
                       <a href="/admin/products/edit/<%= products[i].id %>" class="button is-primary mr-2"><span class="icon is-medium"><i class="fas fa-pen"></i></span> </a>
                       <button type="button" class="button deletebutton is-danger"><span class="icon is-medium"><i class="fas fa-trash"></i></span></button>
                     </div>

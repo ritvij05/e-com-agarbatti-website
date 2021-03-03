@@ -3,8 +3,8 @@ $(document).ready(()=>{
     $(this).toggleClass('is-active');
     $('#navmenu').toggleClass('is-active');
   });
-  $('.delete').click(function(){
-    $(this).closest('.notification').remove();
+  $('.notification').click(function(){
+    $(this).remove();
   });
   $('.modal_trigger').click(function(){
     var v = $(this).attr('data-target');

@@ -238,7 +238,7 @@ AdminModel.storeProduct = function(data,result){
       };
       return result('Product Addition Successful...');
     });
-  
+
 }
 
 // @desc   Update Products
@@ -272,8 +272,8 @@ AdminModel.manageProducts = function(result){
 
 }
 
-//@desc Get single Product
-AdminModel.editProduct = function(req,result){
+//@desc Get single Product !!!yesssss
+AdminModel.getProduct = function(req,result){
   connectDB.query(`select * from products where id='${req.params.id}'`,(err,results)=>{
     if(err) {
       console.log(err)
@@ -301,13 +301,19 @@ AdminModel.uploadImages = function(request,result){
     let arr =[];
     if(err){
       return result(err);
-    }else{ 
+    }else{
       if(results[0].images){
+        var images = results[0].images;
+        images = images.split(",");
         // arr.push(JSON.parse(results[0].images))
-        arr.push(results[0].images);
+        arr = arr.concat(images);
       }
       for(var i = 0; i < request.files.length; i++){
-        arr.push(request.params.id+'/'+request.files[i].filename)
+        // breaking the loop if array length is more than 10
+        if(arr.length >= 10){
+          break;
+        }
+        arr.push(request.params.id+'/'+request.files[i].filename);
         // arr.push(request.files[i].filename)
       }
       // console.log(arr);
@@ -320,6 +326,65 @@ AdminModel.uploadImages = function(request,result){
   });
 }
 
+AdminModel.deleteImage = function(request,result){
+  connectDB.query(`select images from products where id='${request.body.id}'`,(err,results)=>{
+    if(err){
+      return result(err);
+    }else{
+      if(results[0].images){
+        var images = results[0].images;
+        images = images.split(",");
+        var i = images.indexOf(request.body.name);
+        if(i != -1){
+          images.splice(i, 1);
+        }
+        if(images.length == 0){
+          connectDB.query(`update products set images = NULL where id='${request.body.id}'`,(err,results)=>{
+            if(err) return result(err);
+            return result('image deleted');
+          });
+        }
+        else{
+          connectDB.query(`update products set images='${images}' where id='${request.body.id}'`,(err,results)=>{
+            if(err) return result(err);
+            return result('image deleted');
+          });
+        }
+        // arr.push(JSON.parse(results[0].images))
+      }
+    }
+    // let path='/images/products/'+request.body.id;
+  });
+}
+
+AdminModel.getQueries = function(result){
+  connectDB.query(`select * from queries`,(err,results)=>{
+    if(err) {
+      console.log(err)
+      return result('error');
+    }
+    return result(results);
+  });
+}
+
+AdminModel.getQuery = function(req,result){
+  connectDB.query(`select * from queries where id='${req.params.id}'`,(err,results)=>{
+    if(err) {
+      console.log(err)
+      return result('error');
+    }
+    return result(results);
+  });
+}
+
+AdminModel.updateQuery = function(req,result){
+  connectDB.query(`update queries set status = '1' where id='${req.body.id}'`,(err,results)=>{
+    if(err) {
+      return result('error');
+    }
+    return result('query updated');
+  });
+}
 
 
 module.exports = AdminModel;

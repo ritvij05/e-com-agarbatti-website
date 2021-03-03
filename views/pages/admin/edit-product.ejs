@@ -59,7 +59,7 @@
                         <%} else{%>
                           <option value="<%= categories[i].id %>"><%= categories[i].name %></option>
                           <%}}%>
-                        
+
                       </select>
                     </div>
                   </div>
@@ -99,7 +99,7 @@
                         <input type="checkbox" name="in_stock" value="0" id='in_stock_checkbox'>
                         <%}%>
                       Available in stock
-                      
+
                     </label>
                   </div>
                   <div class="field">
@@ -120,24 +120,25 @@
                       On Sale
                     </label>
                   </div>
+                  <% var divClass = ''; %>
                   <%if (products.discount_price>0) { %>
-                    <div class="field active" id="discount_field"></div>
-                    <%} else{%>
-                      <div class="field" id="discount_field"></div>
-                      <%}%>   
-                    <!-- active if discount value not null -->
+                    <% divClass = 'active'; %>
+                  <% } %>
+                  <div class="field <%= divClass %>" id="discount_field">
                     <label class="label">Discount Price</label>
                     <div class="control">
-                      <input type="number" name="discounted_price" class="input" value="<%= products.discount_price%>" placeholder="Enter discounted price">
+                      <input type="number" name="discounted_price" id="discounted_price" class="input" value="<%= products.discount_price%>" placeholder="Enter discounted price">
                     </div>
                     <p class="help">Discounted price, i.e final price after discount</p>
                   </div>
-                  <div class="field is-grouped mt-4">
-                    <div class="control">
-                      <button type="submit" class="button is-primary">Update</button>
-                    </div>
-                    <div class="control">
-                      <a href="/admin/products/manage" class="button is-light">Cancel</a>
+                    <!-- active if discount value not null -->
+                    <div class="field is-grouped mt-4">
+                      <div class="control">
+                        <button type="submit" class="button is-primary">Update</button>
+                      </div>
+                      <div class="control">
+                        <a href="/admin/products/manage" class="button is-light">Cancel</a>
+                      </div>
                     </div>
                   </div>
                 </form>
